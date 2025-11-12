@@ -1,0 +1,205 @@
+int  Choice_Round(int& Round)
+{
+	cout << "How Many Question you Want ? \n";
+	cin >> Round;
+	return Round;
+}
+int LevelOf_Question(int &l)
+{
+	cout << "Choice Level Question:[1]:Easy,[2]:Med,[3]:Hard,[4]:Mix ? ";
+	cin >> l;
+	return l;
+}
+int Random_Number(int from, int to)
+{
+	int Random = rand() % (to - from + 1) + from;
+	return Random;
+}
+enum enlevel{easy=1,Med=2,hard=3,mix=4};
+int Check_Diffculty(enlevel level)
+{
+	if (level == easy)
+		return Random_Number(1, 10);
+	else if (level == Med)
+		return Random_Number(10, 30);
+	else if (level == hard)
+		return Random_Number(30, 70);
+	else
+		return Random_Number(1, 100);
+
+}
+int Check_Operation(int &OP)
+{
+	cout << "Choice Operation :[1]:Add,[2]:Sub,[3]:Mul,[4]:Div,[5]:Mix ? ";
+	cin >> OP;
+	return OP;
+}
+enum OP_Type{Add=1,Sub=2,Mul=3,Div=4,Mix=5};
+char Get_OPType(OP_Type Type)
+{
+	if (Type == Add)
+		return '+';
+	else if (Type == Sub)
+		return '-';
+	else if (Type == Mul)
+		return '*';
+	else if (Type == Div)
+		return '/';
+}
+int  Get_MixOP()
+{
+	int RandomMix = Random_Number(1, 4);
+	
+		return RandomMix;
+}
+char Final_Operation(int Number)
+{
+	OP_Type FinalOP;
+	if ((OP_Type)Number == Mix)
+		FinalOP = (OP_Type)Get_MixOP();
+	else
+		FinalOP = (OP_Type)Number;
+
+	char Symbol = Get_OPType(FinalOP);
+	return Symbol;
+
+}
+int CorrectAnswer(int Num1, int Num2,char OPeration)
+{
+	if (OPeration == '+')
+		return Num1 + Num2;
+	else if (OPeration == '-')
+		return Num1 - Num2;
+	else if (OPeration == '*')
+		return Num1 * Num2;
+	else if (OPeration == '/')
+		return Num1 / Num2;
+}
+string Convert_NumberOfLevelTo_Word(enlevel Level)
+{
+	if (Level == easy)
+		return "Easy";
+	else if (Level == Med)
+		return "Med";
+	else if (Level == hard)
+		return "Hard";
+	else
+		return "Mix";
+
+}
+string Convert_OperationType_To_Word(OP_Type Type)
+{
+
+	if (Type == '+')
+		return "Add";
+	else if (Type == '-')
+		return "Sub";
+	else if (Type == '*')
+		return "Mul";
+	else if (Type == '/')
+		return "Div";
+	else
+		return "Mix";
+}
+
+void Start_Game(int Round,int &Num1,int &Num2,int &l,int &OP,char &OPeration)
+{
+	int CounterRightAnswer = 0;
+	int CounterWrongAnswer = 0;
+	int correctAnswer;
+	int UserAnswer;
+	string Level;
+	string OperationType;
+	
+	LevelOf_Question(l);
+	cout << "\n";
+	Check_Operation(OP);
+	for (int i = 1;i <= Round;i++)
+	{
+		cout << "\n";
+		cout << "\n";
+		cout << "Question [ " << i << " / " << Round << " ] " << endl;
+		cout << "\n";
+		Num1 = Check_Diffculty((enlevel)l);
+		Num2 = Check_Diffculty((enlevel)l);
+		OPeration = Final_Operation(OP);
+		correctAnswer = CorrectAnswer(Num1, Num2, OPeration);
+		Level = Convert_NumberOfLevelTo_Word((enlevel)l);
+		OperationType = Convert_OperationType_To_Word((OP_Type)OP);
+		cout << Num1 << endl;
+		cout << OPeration << endl;
+		cout << Num2 << endl;
+		cout << "-----------------------------\n";
+		cin >> UserAnswer;
+		cout << "\n";
+		if (UserAnswer == correctAnswer)
+		{
+			CounterRightAnswer++;
+			system("color 2F");
+			cout << "Right Answer :-(\n";
+		}
+		else
+		{
+			CounterWrongAnswer++;
+			cout << "\a";
+			system("color 4F");
+			cout << "Wrong Answer :)\n";
+			cout << "Right Answer is : " << correctAnswer <<endl;
+		}
+	}
+	cout << "\n";
+	cout << "--------------------------------------------------\n";
+	cout << "\n";
+	if (CounterRightAnswer > CounterWrongAnswer)
+	{
+		cout << "\t FINAL RESULTS IS PASS :-(\n";
+	}
+	else {
+		cout << "\tFINAL RESULTS IS FAIL :-) \n";
+	}
+	cout << "\n";
+	cout << "----------------------------------------\n";
+	cout << "Number Of Question : " << Round << endl;
+	cout << "Question Level : " <<Level<<endl;
+	cout << "Operation Type : " << OperationType << endl;
+	cout << "Number Of Right Answer : " << CounterRightAnswer << endl;
+	cout << "Number Of Wrong Answer : " << CounterWrongAnswer << endl;
+	cout << "---------------------------------------------------\n";
+}
+void Play_Again(int &Round, int& Num1, int& Num2, int& l, int& OP, char& OPeration)
+{
+	char PlayAgain;
+	cout << "Do You Want To Play Again(Y/N) ? \n";
+	cin >> PlayAgain;
+	while (PlayAgain == 'y' || PlayAgain == 'Y')
+	{
+		system("cls");
+		system("color 0F");
+		Choice_Round(Round);
+		Start_Game(Round, Num1, Num2, l, OP, OPeration);
+		cout << "Do You Want To Play Again ? \n";
+		cin >> PlayAgain;
+
+	}
+}
+
+
+
+
+int main()
+{
+	int Round;
+	int Num1;
+	int Num2;
+	int l;
+	int OP;
+	char OPeration;
+	srand((unsigned)time(NULL));
+	Choice_Round(Round);
+	Start_Game(Round, Num1, Num2, l,OP,OPeration);
+	Play_Again( Round,Num1,Num2,l,OP,OPeration);
+
+	return 0;
+}
+
+		
